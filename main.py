@@ -24,17 +24,21 @@ class Maze:
         return "Maze H: {} - W: {}".format(self.height, self.width)
 
     def print_maze(self):
-        ascii_maze = " " + "_" * (self.width * 2) + "\n"
+        ascii_maze = "#" * (self.width * 2 + 1) + "\n"
         for row in self.container:
-            ascii_maze += '|'
+            ascii_maze += '#'
             for cell in row:
-                ascii_maze += " " if ((cell.carve_direction and S) != 0) else "_"
-                if cell.carve_direction and E != 0:
-                    ascii_maze += " " if ((cell.carve_direction or row[cell.x + 1].carve_direction) and S) != 0 else "_"
+                if E in cell.carve_direction:
+                    ascii_maze += "  "
                 else:
-                    ascii_maze += "|"
+                    ascii_maze += " #"
+            ascii_maze += '\n#'
+            for cell in row:
+                if S in cell.carve_direction:
+                    ascii_maze += " #"
+                else:
+                    ascii_maze += "##"
             ascii_maze += '\n'
-        ascii_maze += " " + "_" * (self.width * 2) + "\n"
         print ascii_maze
 
     def initiate(self):
@@ -52,7 +56,7 @@ class Maze:
         for direction in directions:
             nx = cx + DX[direction]
             ny = cy + DY[direction]
-            if (0 <= ny < self.height) and (0 <= nx < self.width) and not self.container[ny][nx].carve_direction:
+            if (0 <= ny < self.height) and (0 <= nx < self.width) and len(self.container[ny][nx].carve_direction) == 0:
                 self.container[cy][cx].carve_direction.append(direction)
                 self.container[ny][nx].carve_direction.append(OPPOSITE[direction])
                 self.carve_passages_from(nx, ny)
@@ -61,11 +65,15 @@ class Maze:
 class Cell:
     x = 0
     y = 0
-    carve_direction = list()
+    carve_direction = None
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.carve_direction = list()
+
+    def __str__(self):
+        return "{}".format(", ".join(self.carve_direction))
 
 
 def parse_arguments():
@@ -75,9 +83,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--height', '-hh', dest='height', help='Height of the maze',
-                        type=int, required=False, default=10)
+                        type=int, required=False, default=5)
     parser.add_argument('--width', '-ww', dest='width', help='Width of the maze',
-                        type=int, required=False, default=10)
+                        type=int, required=False, default=5)
 
     return parser.parse_args()
 
