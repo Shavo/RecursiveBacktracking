@@ -89,7 +89,7 @@ def parse_arguments():
                         type=int, required=False, default=18)
     parser.add_argument('--width', '-ww', dest='width', help='Width of the maze',
                         type=int, required=False, default=50)
-    parser.add_argument('--seed', '-s', dest='seed', help='Width of the maze',
+    parser.add_argument('--seed', '-s', dest='seed', help='String that serves as seed for the Maze',
                         type=str, required=False, default=None)
 
     return parser.parse_args()
