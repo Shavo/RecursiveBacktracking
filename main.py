@@ -1,5 +1,5 @@
 # coding=utf-8
-from random import shuffle
+from random import shuffle, seed
 import argparse
 
 N, S, E, W = 'N', 'S', 'E', 'W'
@@ -89,12 +89,16 @@ def parse_arguments():
                         type=int, required=False, default=18)
     parser.add_argument('--width', '-ww', dest='width', help='Width of the maze',
                         type=int, required=False, default=50)
+    parser.add_argument('--seed', '-s', dest='seed', help='Width of the maze',
+                        type=str, required=False, default=None)
 
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_arguments()
+    if args.seed:
+        seed(args.seed)
     maze = Maze(args.height, args.width)
     maze.carve_passages_from(0, 0)
     maze.print_maze()
