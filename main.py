@@ -24,9 +24,17 @@ class Maze:
         self.container = self.initiate()
 
     def __str__(self):
+        """
+        Used for debugging purposes
+        :return:
+        """
         return "Maze H: {} - W: {}".format(self.height, self.width)
 
     def print_maze(self):
+        """
+        Make a text representation of the maze
+        :return:
+        """
         ascii_maze = "{}".format(WALL_CHAR) * (self.width * 2 + 1) + "\n"
         for row in self.container:
             ascii_maze += "{}".format(WALL_CHAR)
@@ -45,6 +53,10 @@ class Maze:
         print ascii_maze
 
     def initiate(self):
+        """
+        Make a 2D list of empty Cell objects
+        :return:
+        """
         m = list()
         for y in range(self.height):
             row = list()
@@ -54,7 +66,14 @@ class Maze:
         return m
 
     def carve_passages_from(self, cx, cy):
+        """
+        Recursively generate maze hallways using Recursive Backtracking
+        :param cx:
+        :param cy:
+        :return:
+        """
         directions = [N, S, E, W]
+        # Shuffle is affected by the seed if provided
         shuffle(directions)
         for direction in directions:
             nx = cx + DX[direction]
@@ -66,6 +85,10 @@ class Maze:
 
 
 class Cell:
+    """
+    Representation of a Cell
+    Connected Cells are the hallways of the Maze
+    """
     x = 0
     y = 0
     carve_direction = None
@@ -76,12 +99,16 @@ class Cell:
         self.carve_direction = list()
 
     def __str__(self):
+        """
+        Used for debugging purposes
+        :return:
+        """
         return "{}".format(", ".join(self.carve_direction))
 
 
 def parse_arguments():
     """
-    parse command line arguments
+    Parse command line arguments
     """
     parser = argparse.ArgumentParser()
 
